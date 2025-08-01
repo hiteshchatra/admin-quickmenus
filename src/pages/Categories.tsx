@@ -19,6 +19,8 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/components/auth/AuthProvider';
 import { ImageUpload } from '@/components/ui/image-upload';
+import { Pagination } from '@/components/ui/pagination';
+import { usePagination } from '@/hooks/usePagination';
 import {
   Category,
   getCategories,
@@ -225,253 +227,329 @@ export const Categories: React.FC = () => {
     setFormData(prev => ({ ...prev, image: '' }));
   };
 
+  // Pagination
+  const {
+    currentPage,
+    totalPages,
+    paginatedData: paginatedCategories,
+    goToPage,
+    itemsPerPage,
+    totalItems
+  } = usePagination({
+    data: categories,
+    itemsPerPage: 8
+  });
+
   return (
-    <div className="space-y-6 animate-slide-in-up">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 animate-slide-in-up">
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent">
-        Categories
-          </h1>
-          <p className="text-muted-foreground mt-2 animate-slide-in-up" style={{ animationDelay: '0.1s' }}>
-        Organize your menu items into categories
-          </p>
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex-1">
+            <h1 className="text-4xl md:text-5xl font-bold text-primary">
+              Categories
+            </h1>
+            <p className="text-gray-600 mt-3 text-lg">
+              Organize your menu items into beautiful categories
+            </p>
+          </div>
+          <Button
+            onClick={handleAddCategory}
+            className="bg-primary hover:bg-primary/90 text-white w-full md:w-auto"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Category
+          </Button>
         </div>
-        <Button
-          onClick={handleAddCategory}
-          className="admin-button admin-gradient shadow-[var(--shadow-elegant)] hover:shadow-[var(--shadow-glow)] w-full md:w-auto"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Category
-        </Button>
-      </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="admin-card">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <FolderOpen className="w-5 h-5 text-primary" />
-              <div>
-                {loading ? (
-                  <Skeleton className="h-8 w-16" />
-                ) : (
-                  <p className="text-2xl font-bold">{categories.length}</p>
-                )}
-                <p className="text-sm text-muted-foreground">Total Categories</p>
+        {/* Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Total Categories */}
+          <Card className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-yellow-100 flex items-center justify-center border border-yellow-200">
+                  <FolderOpen className="w-6 h-6 text-yellow-600" />
+                </div>
+                <div>
+                  {loading ? (
+                    <Skeleton className="h-10 w-20 mb-2 bg-gray-200 rounded-lg" />
+                  ) : (
+                    <p className="text-3xl font-bold text-gray-800">{categories.length}</p>
+                  )}
+                  <p className="text-sm text-gray-500 font-medium">Total Categories</p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="admin-card">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <Eye className="w-5 h-5 text-success" />
-              <div>
-                {loading ? (
-                  <Skeleton className="h-8 w-16" />
-                ) : (
-                  <p className="text-2xl font-bold">{categories.filter(cat => cat.visible).length}</p>
-                )}
-                <p className="text-sm text-muted-foreground">Visible</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card className="admin-card">
-          <CardContent className="p-6">
-            <div className="flex items-center space-x-2">
-              <EyeOff className="w-5 h-5 text-muted-foreground" />
-              <div>
-                {loading ? (
-                  <Skeleton className="h-8 w-16" />
-                ) : (
-                  <p className="text-2xl font-bold">{categories.filter(cat => !cat.visible).length}</p>
-                )}
-                <p className="text-sm text-muted-foreground">Hidden</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+            </CardContent>
+          </Card>
 
-      {/* Categories List */}
-      <Card className="admin-card">
-        <CardHeader>
-          <CardTitle>All Categories</CardTitle>
-          <CardDescription>
-            Manage your menu categories and their visibility
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {loading ? (
-              Array.from({ length: 3 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-border rounded-lg gap-4"
-                >
-                  <div className="flex items-center space-x-4">
-                    <Skeleton className="w-4 h-4" />
-                    <div>
-                      <Skeleton className="h-5 w-32 mb-2" />
-                      <Skeleton className="h-4 w-48" />
+          {/* Visible Categories */}
+          <Card className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center border border-primary">
+                  <Eye className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  {loading ? (
+                    <Skeleton className="h-10 w-20 mb-2 bg-gray-200 rounded-lg" />
+                  ) : (
+                    <p className="text-3xl font-bold text-gray-800">{categories.filter(cat => cat.visible).length}</p>
+                  )}
+                  <p className="text-sm text-gray-500 font-medium">Visible</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Hidden Categories */}
+          <Card className="bg-white border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center border border-gray-200">
+                  <EyeOff className="w-6 h-6 text-gray-600" />
+                </div>
+                <div>
+                  {loading ? (
+                    <Skeleton className="h-10 w-20 mb-2 bg-gray-200 rounded-lg" />
+                  ) : (
+                    <p className="text-3xl font-bold text-gray-800">{categories.filter(cat => !cat.visible).length}</p>
+                  )}
+                  <p className="text-sm text-gray-500 font-medium">Hidden</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Categories List */}
+        <Card className="bg-white border border-gray-200">
+          <CardHeader className="bg-gray-50 border-b border-gray-200">
+            <CardTitle className="text-xl font-bold text-gray-800 flex items-center space-x-2">
+              <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center border border-gray-200">
+                <FolderOpen className="w-4 h-4 text-gray-600" />
+              </div>
+              <span>All Categories</span>
+            </CardTitle>
+            <CardDescription className="text-gray-600">
+              Manage your menu categories and their visibility
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-6">
+            <div className="space-y-4">
+              {loading ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-gray-50 border border-gray-200 rounded-xl gap-4"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <Skeleton className="w-4 h-4 bg-gray-300" />
+                      <div>
+                        <Skeleton className="h-5 w-32 mb-2 bg-gray-300 rounded-lg" />
+                        <Skeleton className="h-4 w-48 bg-gray-300 rounded-lg" />
+                      </div>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Skeleton className="h-8 w-20 bg-gray-300 rounded-lg" />
+                      <Skeleton className="h-8 w-8 bg-gray-300 rounded-lg" />
+                      <Skeleton className="h-8 w-8 bg-gray-300 rounded-lg" />
                     </div>
                   </div>
-                  <div className="flex space-x-2">
-                    <Skeleton className="h-8 w-20" />
-                    <Skeleton className="h-8 w-8" />
-                    <Skeleton className="h-8 w-8" />
+                ))
+              ) : categories.length === 0 ? (
+                <div className="text-center py-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300">
+                  <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-6 border border-gray-200">
+                    <FolderOpen className="w-10 h-10 text-gray-600" />
                   </div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-3">No categories yet</h3>
+                  <p className="text-gray-600 mb-8 max-w-md mx-auto">
+                    Create your first category to organize your menu items and make them easier for customers to browse
+                  </p>
+                  <Button 
+                    onClick={handleAddCategory}
+                    className="bg-red-500 hover:bg-red-600 text-white"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add First Category
+                  </Button>
                 </div>
-              ))
-            ) : categories.length === 0 ? (
-              <div className="text-center py-12">
-                <FolderOpen className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">No categories yet</h3>
-                <p className="text-muted-foreground mb-6">
-                  Create your first category to organize your menu items
-                </p>
-                <Button onClick={handleAddCategory}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add First Category
+              ) : (
+                paginatedCategories.map((category: Category, index) => (
+                  <div
+                    key={category.id}
+                    className="flex flex-col md:flex-row md:items-center justify-between p-6 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-300 gap-4"
+                  >
+                    <div className="flex items-center space-x-4 w-full md:w-auto">
+                      <div className="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center cursor-grab hover:bg-gray-200 transition-colors duration-300 border border-gray-200">
+                        <GripVertical className="w-4 h-4 text-gray-600" />
+                      </div>
+                      
+                      {/* Category Image */}
+                      {category.image && (
+                        <div className="w-12 h-12 rounded-lg overflow-hidden border border-gray-200">
+                          <img 
+                            src={category.image} 
+                            alt={category.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      
+                      <div className="flex-1">
+                        <div className="flex flex-wrap items-center space-x-3 mb-2">
+                          <h3 className="font-bold text-lg text-gray-800">
+                            {category.name}
+                          </h3>
+                          <Badge 
+                            variant={category.visible ? "default" : "secondary"}
+                            className={`${category.visible 
+                              ? 'bg-yellow-100 text-yellow-800 border-yellow-200' 
+                              : 'bg-gray-100 text-gray-800 border-gray-200'
+                            } font-medium`}
+                          >
+                            {category.visible ? "Visible" : "Hidden"}
+                          </Badge>
+                          <Badge 
+                            variant="outline"
+                            className="bg-red-50 text-red-700 border-red-200 font-medium"
+                          >
+                            {getCategoryItemCount(category.id)} items
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-gray-600 break-words">
+                          {category.description || "No description provided"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center space-x-3 w-full md:w-auto">
+                      <div className="flex items-center space-x-3 bg-gray-100 rounded-lg p-2 border border-gray-200">
+                        <Label htmlFor={`visible-${category.id}`} className="text-sm font-medium text-gray-700">
+                          {category.visible ? "Visible" : "Hidden"}
+                        </Label>
+                        <Switch
+                          id={`visible-${category.id}`}
+                          checked={category.visible}
+                          onCheckedChange={() => handleToggleVisibility(category.id)}
+                        />
+                      </div>
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEditCategory(category)}
+                        className="border-yellow-300 text-yellow-700 hover:bg-yellow-50"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </Button>
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDeleteCategory(category.id)}
+                        disabled={getCategoryItemCount(category.id) > 0}
+                        className="border-red-300 text-red-700 hover:bg-red-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Pagination */}
+            {categories.length > 0 && (
+              <div className="mt-8">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={goToPage}
+                  itemsPerPage={itemsPerPage}
+                  totalItems={totalItems}
+                />
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Add/Edit Category Dialog */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="max-w-2xl bg-white">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold text-gray-800">
+                {editingCategory ? 'Edit Category' : 'Add New Category'}
+              </DialogTitle>
+              <DialogDescription className="text-gray-600">
+                {editingCategory
+                  ? 'Update the category information below.'
+                  : 'Create a new category to organize your menu items.'
+                }
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-sm font-medium text-gray-700">Category Name</Label>
+                <Input
+                  id="name"
+                  placeholder="e.g., Appetizers, Main Courses, Desserts"
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  className="border-gray-300 focus:border-red-500"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="description" className="text-sm font-medium text-gray-700">Description</Label>
+                <Input
+                  id="description"
+                  placeholder="Brief description of this category"
+                  value={formData.description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  className="border-gray-300 focus:border-red-500"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-sm font-medium text-gray-700">Category Image</Label>
+                <ImageUpload
+                  onImageSelect={handleImageSelect}
+                  onImageRemove={handleImageRemove}
+                  currentImage={formData.image}
+                  loading={imageUploading}
+                />
+              </div>
+
+              <div className="flex items-center space-x-3 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <Switch
+                  id="visible"
+                  checked={formData.visible}
+                  onCheckedChange={(checked) => setFormData(prev => ({ ...prev, visible: checked }))}
+                />
+                <Label htmlFor="visible" className="text-sm font-medium text-gray-700">Make this category visible to customers</Label>
+              </div>
+
+              <div className="flex space-x-3 pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDialogOpen(false)}
+                  className="flex-1 border-gray-300"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSaveCategory}
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+                >
+                  {editingCategory ? 'Update Category' : 'Add Category'}
                 </Button>
               </div>
-            ) : (
-              categories.map((category: Category) => (
-                <div
-                  key={category.id}
-                  className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-border rounded-lg hover:bg-accent/50 transition-colors gap-4"
-                >
-                  <div className="flex items-center space-x-4 w-full md:w-auto">
-                    <GripVertical className="w-4 h-4 text-muted-foreground cursor-grab" />
-                    <div className="flex-1">
-                      <div className="flex flex-wrap items-center space-x-3">
-                        <h3 className="font-medium">{category.name}</h3>
-                        <Badge variant={category.visible ? "default" : "secondary"}>
-                          {category.visible ? "Visible" : "Hidden"}
-                        </Badge>
-                        <Badge variant="outline">
-                          {getCategoryItemCount(category.id)} items
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-1 break-words">
-                        {category.description}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap items-center space-x-2 w-full md:w-auto">
-                    <div className="flex items-center space-x-2">
-                      <Label htmlFor={`visible-${category.id}`} className="text-sm">
-                        {category.visible ? "Visible" : "Hidden"}
-                      </Label>
-                      <Switch
-                        id={`visible-${category.id}`}
-                        checked={category.visible}
-                        onCheckedChange={() => handleToggleVisibility(category.id)}
-                      />
-                    </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEditCategory(category)}
-                      className="mt-2 md:mt-0"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDeleteCategory(category.id)}
-                      disabled={getCategoryItemCount(category.id) > 0}
-                      className="mt-2 md:mt-0"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Add/Edit Category Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="admin-card">
-          <DialogHeader>
-            <DialogTitle>
-              {editingCategory ? 'Edit Category' : 'Add New Category'}
-            </DialogTitle>
-            <DialogDescription>
-              {editingCategory
-                ? 'Update the category information below.'
-                : 'Create a new category to organize your menu items.'
-              }
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="name">Category Name</Label>
-              <Input
-                id="name"
-                placeholder="e.g., Appetizers, Main Courses, Desserts"
-                value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                className="admin-input"
-              />
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="description">Description</Label>
-              <Input
-                id="description"
-                placeholder="Brief description of this category"
-                value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                className="admin-input"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Category Image</Label>
-              <ImageUpload
-                onImageSelect={handleImageSelect}
-                onImageRemove={handleImageRemove}
-                currentImage={formData.image}
-                loading={imageUploading}
-              />
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <Switch
-                id="visible"
-                checked={formData.visible}
-                onCheckedChange={(checked) => setFormData(prev => ({ ...prev, visible: checked }))}
-              />
-              <Label htmlFor="visible">Make this category visible to customers</Label>
-            </div>
-
-            <div className="flex space-x-3 pt-4">
-              <Button
-                variant="outline"
-                onClick={() => setIsDialogOpen(false)}
-                className="flex-1"
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleSaveCategory}
-                className="flex-1 bg-gradient-primary"
-              >
-                {editingCategory ? 'Update Category' : 'Add Category'}
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 };

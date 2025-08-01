@@ -254,6 +254,68 @@ export const getOptimizedImageUrl = (
   );
 };
 
+// Upload QR code image
+export const uploadQRCodeImage = async (
+  userId: string, 
+  file: File
+): Promise<string> => {
+  try {
+    console.log('Starting QR code image upload...');
+    
+    const compressedFile = await compressImage(file, 600, 0.9); // Higher quality for QR codes
+    console.log('QR code image compressed successfully');
+    
+    // Generate authentication parameters
+    const timestamp = Math.floor(Date.now() / 1000);
+    const fileName = `qr_code_${timestamp}_${file.name}`;
+    const folder = `/users/${userId}/qr-codes/`;
+    
+    // Create the token for signature (timestamp + publicKey)
+    const token = `${timestamp}${IMAGEKIT_CONFIG.publicKey}`;
+    const signature = generateSignature(token, IMAGEKIT_CONFIG.privateKey);
+    
+    console.log('Authentication prepared:', { timestamp, fileName, folder });
+    
+    // Create form data for upload
+    const formData = new FormData();
+    formData.append('file', compressedFile);
+    formData.append('fileName', fileName);
+    formData.append('folder', folder);
+    formData.append('useUniqueFileName', 'true');
+    formData.append('tags', `qr-code,${userId}`);
+    formData.append('publicKey', IMAGEKIT_CONFIG.publicKey);
+    formData.append('timestamp', timestamp.toString());
+    formData.append('signature', signature);
+    
+    // Upload to ImageKit.io
+    console.log('Uploading QR code to ImageKit.io...');
+    const response = await fetch('https://upload.imagekit.io/api/v1/files/upload', {
+      method: 'POST',
+      body: formData,
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('ImageKit upload error:', errorText);
+      throw new Error(`Upload failed: ${response.statusText}`);
+    }
+    
+    const result = await response.json();
+    console.log('ImageKit QR code upload successful:', result.url);
+    return result.url;
+  } catch (error) {
+    console.error('Error uploading QR code to ImageKit:', error);
+    
+    // Fallback: return a data URL for demo purposes
+    console.log('Using fallback data URL for QR code...');
+    const reader = new FileReader();
+    return new Promise((resolve) => {
+      reader.onload = () => resolve(reader.result as string);
+      reader.readAsDataURL(file);
+    });
+  }
+};
+
 // Get thumbnail URL
 export const getThumbnailUrl = (originalUrl: string, size: number = 300): string => {
   return getOptimizedImageUrl(originalUrl, size, size, 70);

@@ -2,6 +2,7 @@
 export {
   uploadMenuItemImage,
   uploadCategoryImage,
+  uploadQRCodeImage,
   deleteImage,
   validateImageFile,
   getOptimizedImageUrl,
