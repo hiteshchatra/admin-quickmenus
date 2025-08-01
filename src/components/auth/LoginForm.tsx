@@ -45,79 +45,85 @@ export const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-subtle p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-primary rounded-2xl mb-4 shadow-elegant">
-            <Store className="w-8 h-8 text-white" />
+        {/* Logo and Title */}
+        <div className="text-center mb-6 lg:mb-8">
+          <div className="inline-flex items-center justify-center w-12 h-12 lg:w-16 lg:h-16 bg-red-500 rounded-xl lg:rounded-2xl mb-3 lg:mb-4 shadow-lg">
+            <Store className="w-6 h-6 lg:w-8 lg:h-8 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-foreground">QR Menu Admin</h1>
-          <p className="text-muted-foreground mt-2">Manage your restaurant menu with ease</p>
+          <h1 className="text-2xl lg:text-3xl font-bold text-gray-800">QR Menu Admin</h1>
+          <p className="text-gray-600 mt-2 text-sm lg:text-base">Manage your restaurant menu with ease</p>
         </div>
 
-        <Card className="admin-card">
-          <CardHeader className="text-center">
-            <CardTitle className="text-2xl">
+        {/* Login Card */}
+        <Card className="bg-white shadow-lg border border-gray-200">
+          <CardHeader className="text-center pb-4 lg:pb-6">
+            <CardTitle className="text-xl lg:text-2xl text-gray-800">
               {isLogin ? 'Welcome Back' : 'Create Account'}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-gray-600 text-sm lg:text-base">
               {isLogin 
                 ? 'Sign in to your restaurant admin panel'
                 : 'Set up your restaurant admin account'
               }
             </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+          <CardContent className="p-4 lg:p-6">
+            <form onSubmit={handleSubmit} className="space-y-4 lg:space-y-6">
+              {/* Email Field */}
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+                <Label htmlFor="email" className="text-sm font-medium text-gray-700">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="your@restaurant.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="admin-input pl-10"
+                    className="pl-10 border-gray-300 focus:border-red-500 h-10 lg:h-11"
                     required
                   />
                 </div>
               </div>
 
+              {/* Password Field */}
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">Password</Label>
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700">Password</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="admin-input pl-10 pr-10"
+                    className="pl-10 pr-10 border-gray-300 focus:border-red-500 h-10 lg:h-11"
                     required
                     minLength={6}
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
+              {/* Error Message */}
               {error && (
                 <Alert variant="destructive">
-                  <AlertDescription>{error}</AlertDescription>
+                  <AlertDescription className="text-sm">{error}</AlertDescription>
                 </Alert>
               )}
 
+              {/* Submit Button */}
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-primary hover:opacity-90 shadow-elegant"
+                className="w-full bg-red-500 hover:bg-red-600 text-white h-10 lg:h-11"
                 disabled={loading}
               >
                 {loading ? (
@@ -131,13 +137,14 @@ export const LoginForm: React.FC = () => {
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground">
+            {/* Toggle Login/Register */}
+            <div className="mt-4 lg:mt-6 text-center">
+              <p className="text-sm text-gray-600">
                 {isLogin ? "Don't have an account?" : "Already have an account?"}
                 <button
                   type="button"
                   onClick={() => setIsLogin(!isLogin)}
-                  className="ml-2 text-primary hover:text-primary-dark font-medium transition-colors"
+                  className="ml-2 text-red-600 hover:text-red-700 font-medium transition-colors"
                 >
                   {isLogin ? 'Sign up' : 'Sign in'}
                 </button>
@@ -146,7 +153,8 @@ export const LoginForm: React.FC = () => {
           </CardContent>
         </Card>
 
-        <div className="mt-6 text-center text-xs text-muted-foreground">
+        {/* Footer */}
+        <div className="mt-6 lg:mt-8 text-center text-xs lg:text-sm text-gray-500">
           <p>Secure restaurant menu management platform</p>
         </div>
       </div>

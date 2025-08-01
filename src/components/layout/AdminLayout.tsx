@@ -83,46 +83,45 @@ export const AdminLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex">
+    <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden animate-slide-in-up"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <div className={`
-        fixed inset-y-0 left-0 z-50 w-64 admin-sidebar transform transition-[var(--transition-spring)] shadow-[var(--shadow-strong)]
+        fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen lg:flex lg:flex-col lg:shrink-0
+        lg:translate-x-0 lg:static lg:inset-0 lg:h-screen lg:flex lg:flex-col
       `}>
-        <div className="flex items-center justify-between h-16 px-6 border-b border-border/50 relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent pointer-events-none"></div>
-          <div className="flex items-center space-x-3 relative z-10 animate-slide-in-right">
-            <div className="w-10 h-10 admin-gradient rounded-xl flex items-center justify-center shadow-[var(--shadow-soft)] animate-float">
+        {/* Sidebar Header */}
+        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
               <Store className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold bg-gradient-to-r from-primary to-primary-light bg-clip-text text-transparent">
-                Quick Menu
-              </h1>
-              <p className="text-xs text-muted-foreground">Admin Panel</p>
+              <h1 className="text-lg font-bold text-gray-800">Quick Menu</h1>
+              <p className="text-xs text-gray-500">Admin Panel</p>
             </div>
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setSidebarOpen(false)}
-            className="lg:hidden admin-button relative z-10"
+            className="lg:hidden"
           >
             <X className="w-4 h-4" />
           </Button>
         </div>
 
-        <div className="flex-1 px-4 py-6 space-y-2">
-          {navigationItems.map((item, index) => {
+        {/* Navigation */}
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+          {navigationItems.map((item) => {
             const Icon = item.icon;
             const isActive = isActiveRoute(item.href);
 
@@ -130,98 +129,96 @@ export const AdminLayout: React.FC = () => {
               <NavLink
                 key={item.name}
                 to={item.href}
-                className={`admin-nav-item group ${isActive ? 'active' : ''} animate-slide-in-right`}
-                style={{ animationDelay: `${0.1 + index * 0.1}s` }}
+                className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-red-50 text-red-700 border border-red-200'
+                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                }`}
                 onClick={() => setSidebarOpen(false)}
               >
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                  <Icon className="w-4 h-4" />
-                </div>
-                <span className="font-medium">{item.name}</span>
+                <Icon className="w-5 h-5 flex-shrink-0" />
+                <span className="truncate">{item.name}</span>
               </NavLink>
             );
           })}
-        </div>
+        </nav>
 
-        <div className="p-4 border-t border-border/50 relative">
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent pointer-events-none"></div>
-          <div className="relative z-10">
-            <div className="flex items-center space-x-3 mb-4 p-3 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50 shadow-[var(--shadow-soft)]">
-              <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center animate-glow">
-                <User className="w-5 h-5 text-primary" />
-              </div>
-              <div className="min-w-0">
-                <p className="text-sm font-medium truncate">{user?.email}</p>
-                <p className="text-xs text-muted-foreground">
-                  {isUserSuperAdmin ? 'Super Admin' : 'Restaurant Admin'}
-                </p>
-              </div>
+        {/* User Section */}
+        <div className="p-4 border-t border-gray-200">
+          <div className="flex items-center space-x-3 mb-4 p-3 rounded-lg bg-gray-50">
+            <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+              <User className="w-4 h-4 text-gray-600" />
             </div>
-            
-            {isUserSuperAdmin && (
-              <Button
-                variant="outline"
-                onClick={() => navigate('/super-admin/dashboard')}
-                className="w-full justify-start admin-button hover:border-yellow-500 hover:text-yellow-500 mb-3"
-              >
-                <Crown className="w-4 h-4 mr-2" />
-                Super Admin Panel
-              </Button>
-            )}
-            
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-medium text-gray-900 truncate">{user?.email}</p>
+              <p className="text-xs text-gray-500">
+                {isUserSuperAdmin ? 'Super Admin' : 'Restaurant Admin'}
+              </p>
+            </div>
+          </div>
+          
+          {isUserSuperAdmin && (
             <Button
               variant="outline"
-              onClick={handleLogout}
-              className="w-full justify-start admin-button hover:border-destructive hover:text-destructive"
+              onClick={() => navigate('/super-admin/dashboard')}
+              className="w-full justify-start mb-2 text-sm"
+              size="sm"
             >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
+              <Crown className="w-4 h-4 mr-2" />
+              Super Admin Panel
             </Button>
-          </div>
+          )}
+          
+          <Button
+            variant="outline"
+            onClick={handleLogout}
+            className="w-full justify-start text-sm"
+            size="sm"
+          >
+            <LogOut className="w-4 h-4 mr-2" />
+            Sign Out
+          </Button>
         </div>
       </div>
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top header */}
-        <header className="h-16 bg-card/95 backdrop-blur-xl border-b border-border/50 flex items-center justify-between px-6 shadow-[var(--shadow-soft)] relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-50 pointer-events-none"></div>
-          <div className="relative z-10 flex items-center space-x-4">
+        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-6 shadow-sm">
+          <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden admin-button"
+              className="lg:hidden"
             >
               <Menu className="w-5 h-5" />
             </Button>
 
-            <div className="hidden sm:block">
-              <h2 className="text-xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+            <div>
+              <h2 className="text-lg lg:text-xl font-bold text-gray-800">
                 {navigationItems.find(item => isActiveRoute(item.href))?.name || 'Admin Panel'}
               </h2>
             </div>
           </div>
 
-          <div className="relative z-10 flex items-center space-x-3">
-            <div className="hidden md:block text-right">
-              <p className="text-sm font-medium">{user?.email}</p>
-              <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 bg-success rounded-full animate-glow"></div>
-                <p className="text-xs text-muted-foreground">Online</p>
+          <div className="flex items-center space-x-3">
+            <div className="hidden sm:block text-right">
+              <p className="text-sm font-medium text-gray-900 truncate max-w-32 lg:max-w-none">{user?.email}</p>
+              <div className="flex items-center justify-end space-x-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <p className="text-xs text-gray-500">Online</p>
               </div>
             </div>
-            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shadow-[var(--shadow-soft)] hover:shadow-[var(--shadow-medium)] transition-shadow">
-              <User className="w-5 h-5 text-primary" />
+            <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-gray-600" />
             </div>
           </div>
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-6 relative">
-          <div className="animate-slide-in-up">
-            <Outlet />
-          </div>
+        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+          <Outlet />
         </main>
       </div>
     </div>
