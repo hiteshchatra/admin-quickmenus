@@ -83,7 +83,7 @@ export const AdminLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div
@@ -96,12 +96,12 @@ export const AdminLayout: React.FC = () => {
       <div className={`
         fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        lg:translate-x-0 lg:static lg:inset-0 lg:h-screen lg:flex lg:flex-col
+        lg:translate-x-0 lg:static lg:inset-0 lg:h-full lg:flex lg:flex-col
       `}>
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200">
+        <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
               <Store className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -120,31 +120,33 @@ export const AdminLayout: React.FC = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-          {navigationItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = isActiveRoute(item.href);
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-hidden">
+          <div className="space-y-2">
+            {navigationItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = isActiveRoute(item.href);
 
-            return (
-              <NavLink
-                key={item.name}
-                to={item.href}
-                className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-red-50 text-red-700 border border-red-200'
-                    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                }`}
-                onClick={() => setSidebarOpen(false)}
-              >
-                <Icon className="w-5 h-5 flex-shrink-0" />
-                <span className="truncate">{item.name}</span>
-              </NavLink>
-            );
-          })}
+              return (
+                <NavLink
+                  key={item.name}
+                  to={item.href}
+                  className={`flex items-center space-x-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                  }`}
+                  onClick={() => setSidebarOpen(false)}
+                >
+                  <Icon className="w-5 h-5 flex-shrink-0" />
+                  <span className="truncate">{item.name}</span>
+                </NavLink>
+              );
+            })}
+          </div>
         </nav>
 
         {/* User Section */}
-        <div className="p-4 border-t border-gray-200">
+        <div className="p-4 border-t border-gray-200 flex-shrink-0">
           <div className="flex items-center space-x-3 mb-4 p-3 rounded-lg bg-gray-50">
             <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
               <User className="w-4 h-4 text-gray-600" />
@@ -182,9 +184,9 @@ export const AdminLayout: React.FC = () => {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 h-full">
         {/* Top header */}
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-6 shadow-sm">
+        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-6 shadow-sm flex-shrink-0">
           <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
@@ -217,7 +219,7 @@ export const AdminLayout: React.FC = () => {
         </header>
 
         {/* Page content */}
-        <main className="flex-1 p-4 lg:p-6 overflow-auto">
+        <main className="flex-1 p-4 lg:p-6 overflow-y-auto">
           <Outlet />
         </main>
       </div>

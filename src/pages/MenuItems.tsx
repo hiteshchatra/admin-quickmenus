@@ -42,12 +42,6 @@ import {
   subscribeToMenuItems,
   getCategories
 } from '@/lib/firestore';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 
 export const MenuItems: React.FC = () => {
   const { toast } = useToast();
@@ -121,7 +115,7 @@ export const MenuItems: React.FC = () => {
     totalItems
   } = usePagination({
     data: filteredItems,
-    itemsPerPage: viewMode === 'grid' ? 8 : 6
+    itemsPerPage: viewMode === 'grid' ? 15 : 6
   });
 
   const handleAddItem = () => {
@@ -323,7 +317,7 @@ export const MenuItems: React.FC = () => {
           </div>
           <Button
             onClick={handleAddItem}
-            className="bg-red-500 hover:bg-red-600 text-white flex-1 lg:flex-none"
+            className="bg-blue-500 hover:bg-blue-600 text-white flex-1 lg:flex-none"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Menu Item
@@ -341,8 +335,8 @@ export const MenuItems: React.FC = () => {
               </p>
               <p className="text-xs lg:text-sm text-gray-500 font-medium">Total Items</p>
             </div>
-            <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-red-100 flex items-center justify-center border border-red-200">
-              <UtensilsCrossed className="w-4 h-4 lg:w-5 lg:h-5 text-red-600" />
+            <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-lg bg-blue-100 flex items-center justify-center border border-blue-200">
+              <UtensilsCrossed className="w-4 h-4 lg:w-5 lg:h-5 text-blue-600" />
             </div>
           </div>
         </div>
@@ -400,7 +394,7 @@ export const MenuItems: React.FC = () => {
                 placeholder="Search menu items..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 border-gray-300 focus:border-red-500"
+                className="pl-10 border-gray-300 focus:border-blue-500"
               />
             </div>
             <div className="flex gap-3">
@@ -425,15 +419,15 @@ export const MenuItems: React.FC = () => {
 
       {/* Menu Items */}
       {loading ? (
-        <div className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6' : 'space-y-4'}>
-          {Array.from({ length: viewMode === 'grid' ? 8 : 6 }).map((_, i) => (
-            <div key={i} className={viewMode === 'grid' ? 'space-y-3' : 'flex items-center space-x-4 p-4 bg-white rounded-xl'}>
-              <Skeleton className={viewMode === 'grid' ? 'h-40 lg:h-48 w-full rounded-xl' : 'h-16 w-16 rounded-lg'} />
+        <div className={viewMode === 'grid' ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 gap-2 lg:gap-3' : 'space-y-4'}>
+          {Array.from({ length: viewMode === 'grid' ? 15 : 6 }).map((_, i) => (
+            <div key={i} className={viewMode === 'grid' ? 'space-y-1.5' : 'flex items-center space-x-4 p-4 bg-white rounded-xl'}>
+              <Skeleton className={viewMode === 'grid' ? 'h-28 lg:h-32 w-full rounded-lg' : 'h-16 w-16 rounded-lg'} />
               {viewMode === 'grid' ? (
-                <div className="space-y-2">
-                  <Skeleton className="h-5 lg:h-6 w-3/4" />
-                  <Skeleton className="h-4 w-1/2" />
-                  <Skeleton className="h-4 w-full" />
+                <div className="space-y-1.5">
+                  <Skeleton className="h-3 lg:h-4 w-3/4" />
+                  <Skeleton className="h-2.5 w-1/2" />
+                  <Skeleton className="h-2.5 w-full" />
                 </div>
               ) : (
                 <div className="flex-1 space-y-2">
@@ -460,7 +454,7 @@ export const MenuItems: React.FC = () => {
             {!searchQuery && selectedCategory === 'all' && (
               <Button 
                 onClick={handleAddItem}
-                className="bg-red-500 hover:bg-red-600 text-white"
+                className="bg-blue-500 hover:bg-blue-600 text-white"
               >
                 <Plus className="w-4 h-4 mr-2" />
                 Add First Menu Item
@@ -469,7 +463,7 @@ export const MenuItems: React.FC = () => {
           </CardContent>
         </Card>
       ) : viewMode === 'grid' ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 2xl:grid-cols-6 gap-2 lg:gap-3">
           {paginatedItems.map((item, index) => (
             <Card
               key={item.id}
@@ -484,21 +478,21 @@ export const MenuItems: React.FC = () => {
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                    <ImageIcon className="w-8 h-8 lg:w-12 lg:h-12 text-gray-400" />
+                    <ImageIcon className="w-5 h-5 lg:w-6 lg:h-6 text-gray-400" />
                   </div>
                 )}
                 
                 {/* Badges */}
-                <div className="absolute top-2 lg:top-3 left-2 lg:left-3 flex flex-col gap-1 lg:gap-2">
+                <div className="absolute top-1 lg:top-1.5 left-1 lg:left-1.5 flex flex-col gap-0.5">
                   {item.featured && (
-                    <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-200 text-xs">
-                      <Star className="w-3 h-3 mr-1" />
+                    <Badge className="bg-yellow-100 text-yellow-800 border border-yellow-200 text-xs px-1 py-0.5">
+                      <Star className="w-2 h-2 mr-0.5" />
                       Featured
                     </Badge>
                   )}
                   <Badge
                     variant={item.available ? "default" : "secondary"}
-                    className={`text-xs ${item.available 
+                    className={`text-xs px-1 py-0.5 ${item.available 
                       ? "bg-yellow-100 text-yellow-800 border border-yellow-200" 
                       : "bg-gray-100 text-gray-800 border border-gray-200"
                     }`}
@@ -507,51 +501,69 @@ export const MenuItems: React.FC = () => {
                   </Badge>
                 </div>
 
-                {/* Actions */}
-                <div className="absolute top-2 lg:top-3 right-2 lg:right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="secondary" size="sm" className="h-8 w-8 p-0 bg-white hover:bg-gray-50">
-                        <MoreVertical className="w-4 h-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => handleEditItem(item)}>
-                        <Edit2 className="w-4 h-4 mr-2" />
-                        Edit
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleToggleAvailability(item.id)}>
-                        {item.available ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-                        {item.available ? 'Make Unavailable' : 'Make Available'}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => handleDeleteItem(item.id)} className="text-red-600">
-                        <Trash2 className="w-4 h-4 mr-2" />
-                        Delete
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-
                 {/* Price */}
-                <div className="absolute bottom-2 lg:bottom-3 right-2 lg:right-3 bg-white rounded-lg px-2 lg:px-3 py-1 border border-gray-200">
-                  <p className="text-sm lg:text-lg font-bold text-gray-800 flex items-center">
-                    <DollarSign className="w-3 h-3 lg:w-4 lg:h-4 mr-1" />
+                <div className="absolute bottom-1 lg:bottom-1.5 right-1 lg:right-1.5 bg-white rounded px-1 lg:px-1.5 py-0.5 border border-gray-200">
+                  <p className="text-xs font-bold text-gray-800 flex items-center">
+                    <DollarSign className="w-2 h-2 lg:w-2.5 lg:h-2.5 mr-0.5" />
                     {item.price.toFixed(2)}
                   </p>
                 </div>
               </div>
 
-              <CardContent className="p-3 lg:p-4">
-                <div className="space-y-2">
-                  <h3 className="font-bold text-base lg:text-lg text-gray-800 line-clamp-1">
+              <CardContent className="p-1.5 lg:p-2">
+                <div className="space-y-1">
+                  <h3 className="font-bold text-xs lg:text-sm text-gray-800 line-clamp-1">
                     {item.name}
                   </h3>
-                  <Badge variant="outline" className="text-xs bg-gray-50 text-gray-700 border-gray-200">
+                  <Badge variant="outline" className="text-xs bg-gray-50 text-gray-700 border-gray-200 px-1 py-0.5">
                     {item.categoryName}
                   </Badge>
-                  <p className="text-sm text-gray-600 line-clamp-2">
+                  <p className="text-xs text-gray-600 line-clamp-2">
                     {item.description || "No description available"}
                   </p>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex gap-1 pt-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEditItem(item)}
+                      className="flex-1 h-6 text-xs px-2 py-0 hover:bg-blue-50 border-blue-200 text-blue-700"
+                    >
+                      <Edit2 className="w-3 h-3 mr-1" />
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleToggleAvailability(item.id)}
+                      className={`flex-1 h-6 text-xs px-2 py-0 ${
+                        item.available 
+                          ? 'hover:bg-orange-50 border-orange-200 text-orange-700' 
+                          : 'hover:bg-green-50 border-green-200 text-green-700'
+                      }`}
+                    >
+                      {item.available ? (
+                        <>
+                          <EyeOff className="w-3 h-3 mr-1" />
+                          Hide
+                        </>
+                      ) : (
+                        <>
+                          <Eye className="w-3 h-3 mr-1" />
+                          Show
+                        </>
+                      )}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleDeleteItem(item.id)}
+                      className="h-6 w-6 p-0 hover:bg-red-50 border-red-200 text-red-700"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -619,27 +631,47 @@ export const MenuItems: React.FC = () => {
                           </p>
                         </div>
 
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="sm" className="h-8 w-8 p-0">
-                              <MoreVertical className="w-4 h-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleEditItem(item)}>
-                              <Edit2 className="w-4 h-4 mr-2" />
-                              Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleToggleAvailability(item.id)}>
-                              {item.available ? <EyeOff className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-                              {item.available ? 'Make Unavailable' : 'Make Available'}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleDeleteItem(item.id)} className="text-red-600">
-                              <Trash2 className="w-4 h-4 mr-2" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEditItem(item)}
+                            className="h-8 px-3 hover:bg-blue-50 border-blue-200 text-blue-700"
+                          >
+                            <Edit2 className="w-3.5 h-3.5 mr-1" />
+                            Edit
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleToggleAvailability(item.id)}
+                            className={`h-8 px-3 ${
+                              item.available 
+                                ? 'hover:bg-orange-50 border-orange-200 text-orange-700' 
+                                : 'hover:bg-green-50 border-green-200 text-green-700'
+                            }`}
+                          >
+                            {item.available ? (
+                              <>
+                                <EyeOff className="w-3.5 h-3.5 mr-1" />
+                                Hide
+                              </>
+                            ) : (
+                              <>
+                                <Eye className="w-3.5 h-3.5 mr-1" />
+                                Show
+                              </>
+                            )}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDeleteItem(item.id)}
+                            className="h-8 w-8 p-0 hover:bg-red-50 border-red-200 text-red-700"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </Button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -687,7 +719,7 @@ export const MenuItems: React.FC = () => {
                   placeholder="e.g., Grilled Salmon"
                   value={formData.name}
                   onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="border-gray-300 focus:border-red-500"
+                  className="border-gray-300 focus:border-blue-500"
                 />
               </div>
 
@@ -701,7 +733,7 @@ export const MenuItems: React.FC = () => {
                   placeholder="0.00"
                   value={formData.price || ''}
                   onChange={(e) => setFormData(prev => ({ ...prev, price: parseFloat(e.target.value) || 0 }))}
-                  className="border-gray-300 focus:border-red-500"
+                  className="border-gray-300 focus:border-blue-500"
                 />
               </div>
             </div>
@@ -713,7 +745,7 @@ export const MenuItems: React.FC = () => {
                 placeholder="Describe this delicious item..."
                 value={formData.description}
                 onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                className="min-h-[80px] lg:min-h-[100px] border-gray-300 focus:border-red-500"
+                className="min-h-[80px] lg:min-h-[100px] border-gray-300 focus:border-blue-500"
               />
             </div>
 
@@ -723,7 +755,7 @@ export const MenuItems: React.FC = () => {
                 value={formData.categoryId}
                 onValueChange={(value) => setFormData(prev => ({ ...prev, categoryId: value }))}
               >
-                <SelectTrigger className="border-gray-300 focus:border-red-500">
+                <SelectTrigger className="border-gray-300 focus:border-blue-500">
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -776,7 +808,7 @@ export const MenuItems: React.FC = () => {
               </Button>
               <Button
                 onClick={handleSaveItem}
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+                className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
               >
                 {editingItem ? 'Update Item' : 'Add Item'}
               </Button>

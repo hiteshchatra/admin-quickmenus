@@ -69,28 +69,28 @@ export const Dashboard: React.FC = () => {
   return (
     <div className="space-y-6 lg:space-y-8">
       {/* Welcome Section */}
-      <div className="bg-red-100 rounded-xl lg:rounded-2xl p-4 lg:p-8 border border-red-200">
+      <div className="bg-blue-100 rounded-xl lg:rounded-2xl p-4 lg:p-8 border border-blue-200">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
           <div className="flex-1">
             {loading ? (
               <>
-                <Skeleton className="h-8 lg:h-12 w-full max-w-80 mb-2 lg:mb-3 bg-red-200 rounded-xl" />
-                <Skeleton className="h-4 lg:h-6 w-full max-w-96 bg-red-200 rounded-lg" />
+                <Skeleton className="h-8 lg:h-12 w-full max-w-80 mb-2 lg:mb-3 bg-blue-200 rounded-xl" />
+                <Skeleton className="h-4 lg:h-6 w-full max-w-96 bg-blue-200 rounded-lg" />
               </>
             ) : (
               <>
-                <h1 className="text-2xl lg:text-4xl xl:text-5xl font-bold mb-2 lg:mb-3 text-red-800 leading-tight">
+                <h1 className="text-2xl lg:text-4xl xl:text-5xl font-bold mb-2 lg:mb-3 text-blue-800 leading-tight">
                   Welcome back{userProfile?.restaurantName ? `, ${userProfile.restaurantName}!` : '!'}
                 </h1>
-                <p className="text-red-600 text-base lg:text-xl">
+                <p className="text-blue-600 text-base lg:text-xl">
                   Manage your restaurant menu and track performance
                 </p>
               </>
             )}
           </div>
           <div className="hidden lg:block">
-            <div className="w-24 lg:w-32 h-24 lg:h-32 bg-red-200 rounded-xl lg:rounded-2xl flex items-center justify-center border border-red-300">
-              <BarChart3 className="w-12 lg:w-16 h-12 lg:h-16 text-red-600" />
+            <div className="w-24 lg:w-32 h-24 lg:h-32 bg-blue-200 rounded-xl lg:rounded-2xl flex items-center justify-center border border-blue-300">
+              <BarChart3 className="w-12 lg:w-16 h-12 lg:h-16 text-blue-600" />
             </div>
           </div>
         </div>
@@ -126,8 +126,8 @@ export const Dashboard: React.FC = () => {
             <CardTitle className="text-sm font-medium text-gray-600">
               Menu Items
             </CardTitle>
-            <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-lg lg:rounded-xl bg-red-100 flex items-center justify-center border border-red-200">
-              <UtensilsCrossed className="w-4 h-4 lg:w-6 lg:h-6 text-red-600" />
+            <div className="w-8 h-8 lg:w-12 lg:h-12 rounded-lg lg:rounded-xl bg-blue-100 flex items-center justify-center border border-blue-200">
+              <UtensilsCrossed className="w-4 h-4 lg:w-6 lg:h-6 text-blue-600" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
@@ -192,13 +192,13 @@ export const Dashboard: React.FC = () => {
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button asChild className="flex-1 bg-red-500 hover:bg-red-600 text-white">
+                <Button asChild className="flex-1 bg-blue-500 hover:bg-blue-600 text-white">
                   <Link to="/categories">
                     <Eye className="w-4 h-4 mr-2" />
                     View All
                   </Link>
                 </Button>
-                <Button variant="outline" asChild className="flex-1 border-red-300 text-red-600 hover:bg-red-50">
+                <Button variant="outline" asChild className="flex-1 border-blue-300 text-blue-600 hover:bg-blue-50">
                   <Link to="/categories">
                     <Plus className="w-4 h-4 mr-2" />
                     Add New
@@ -221,14 +221,14 @@ export const Dashboard: React.FC = () => {
                   Add, edit, and manage all your delicious menu items
                 </CardDescription>
               </div>
-              <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl bg-red-100 flex items-center justify-center border border-red-200 flex-shrink-0">
-                <UtensilsCrossed className="w-6 h-6 lg:w-7 lg:h-7 text-red-600" />
+              <div className="w-12 h-12 lg:w-14 lg:h-14 rounded-xl lg:rounded-2xl bg-blue-100 flex items-center justify-center border border-blue-200 flex-shrink-0">
+                <UtensilsCrossed className="w-6 h-6 lg:w-7 lg:h-7 text-blue-600" />
               </div>
             </div>
           </CardHeader>
           <CardContent className="pt-0">
             <div className="space-y-4">
-              <div className="p-3 bg-red-50 rounded-lg border border-red-200">
+              <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
                 <div className="text-sm text-gray-700">
                   Current items: <span className="font-bold text-gray-800 text-base lg:text-lg">{stats.totalItems}</span>
                 </div>
@@ -237,13 +237,13 @@ export const Dashboard: React.FC = () => {
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button asChild className="flex-1 bg-red-500 hover:bg-red-600 text-white">
+                <Button asChild className="flex-1 bg-blue-500 hover:bg-blue-600 text-white">
                   <Link to="/menu-items">
                     <Eye className="w-4 h-4 mr-2" />
                     View All
                   </Link>
                 </Button>
-                <Button variant="outline" asChild className="flex-1 border-red-300 text-red-600 hover:bg-red-50">
+                <Button variant="outline" asChild className="flex-1 border-blue-300 text-blue-600 hover:bg-blue-50">
                   <Link to="/menu-items">
                     <Plus className="w-4 h-4 mr-2" />
                     Add New

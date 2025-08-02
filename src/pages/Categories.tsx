@@ -253,7 +253,7 @@ export const Categories: React.FC = () => {
         </div>
         <Button
           onClick={handleAddCategory}
-          className="bg-red-500 hover:bg-red-600 text-white w-full lg:w-auto"
+          className="bg-blue-500 hover:bg-blue-600 text-white w-full lg:w-auto"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Category
@@ -366,7 +366,7 @@ export const Categories: React.FC = () => {
                 </p>
                 <Button 
                   onClick={handleAddCategory}
-                  className="bg-red-500 hover:bg-red-600 text-white"
+                  className="bg-blue-500 hover:bg-blue-600 text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add First Category
@@ -410,7 +410,7 @@ export const Categories: React.FC = () => {
                         </Badge>
                         <Badge 
                           variant="outline"
-                          className="bg-red-50 text-red-700 border-red-200 font-medium text-xs"
+                          className="bg-blue-50 text-blue-700 border-blue-200 font-medium text-xs"
                         >
                           {getCategoryItemCount(category.id)} items
                         </Badge>
@@ -497,7 +497,7 @@ export const Categories: React.FC = () => {
                 placeholder="e.g., Appetizers, Main Courses, Desserts"
                 value={formData.name}
                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                className="border-gray-300 focus:border-red-500"
+                className="border-gray-300 focus:border-blue-500"
               />
             </div>
 
